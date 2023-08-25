@@ -34,12 +34,14 @@ vta = VIIRS_NOAA20_Thermal_Anomalies_375m_All
 def main():
     dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
 
-    img = wms_params('2021-09-21T00:00:00Z', VIIRS_NOAA20_Thermal_Anomalies_375m_All)
+    img = wms_req('2021-09-21', VIIRS_NOAA20_Thermal_Anomalies_375m_All)
+    print(img)
+    time.sleep(5)
     os.chdir('test_outs')
-    out = open('VIIRS_NOAA20_Thermal_Anomalies_375m_All' + '.png', 'wb')
+    out = open('vta_test' + '.png', 'wb')
     out.write(img.read())
     out.close()
-    Image('VIIRS_NOAA20_Thermal_Anomalies_375m_All' + '.png')
+    Image('vta_test' + '.png')
 
 
     #for d in dates:
@@ -49,16 +51,31 @@ def main():
 # create new directory
 # Connect to GIBS WMS Service
 
-def wms_params(timeP, layer):
-    wms = WebMapService(layer["wms"])
-    result = wms.getmap(layers= layer["layers"],  # Layers
-                 srs=layer["crs"],  # Map projection
-                 bbox=(layer["xmin"],layer["ymin"], layer["xmax"],layer["ymax"]),  # Bounds
-                 size=layer["size"],  # Image size
-                 time=timeP,  # Time of data
-                 format=layer["format"],  # Image format
-                 transparent=layer["transparent"])  # Nodata transparency
-    return result
+#Current version of wms_params takes the name of the layer to check format of time
+def wms_req(timeP, layer):
+    if layer == MODIS_Terra_CorrectedReflectance_TrueColor:
+        wms = WebMapService(layer["wms"])
+        result = wms.getmap(layers= layer["layer"],  # Layers
+                    srs=layer["crs"],  # Map projection
+                    bbox=(layer["xmin"],layer["ymin"], layer["xmax"],layer["ymax"]),  # Bounds
+                    size=layer["size"],  # Image size
+                    time=timeP,  # Time of data
+                    format=layer["format"],  # Image format
+                    transparent=layer["transparent"])
+        return result
+    elif layer == VIIRS_NOAA20_Thermal_Anomalies_375m_All:
+        wms = WebMapService(layer["wms"])
+        result = wms.getmap(layers= layer["layer"],  # Layers
+                    srs=layer["crs"],  # Map projection
+                    bbox=(layer["xmin"],layer["ymin"], layer["xmax"],layer["ymax"]),  # Bounds
+                    size=layer["size"],  # Image size
+                    time=timeP + "T00:00:00Z",  # Time of data and print it
+                    format=layer["format"],  # Image format
+                    transparent=layer["transparent"])
+        return result
+    else:
+        print("Layer not found")
+        return None
 
 
 
