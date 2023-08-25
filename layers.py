@@ -11,3 +11,17 @@ MODIS_Terra_CorrectedReflectance_TrueColor = {
     "transparent": True,
 
 }
+
+VIIRS_NOAA20_Thermal_Anomalies_375m_All = {
+    "xmin": -180,
+    "ymin": -90,
+    "xmax": 180,
+    "ymax": 90,
+    "crs": "EPSG:4326",
+    "wms": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?",
+    "layers": ["VIIRS_NOAA20_Thermal_Anomalies_375m_All"],
+    "size": (1200, 600),
+    "format": "image/png",
+    "transparent": True,
+
+}
