@@ -18,42 +18,36 @@ import numpy as np
 from owslib.wms import WebMapService
 from IPython.display import Image, display
 import os as os
+from layers import MODIS_Terra_CorrectedReflectance_TrueColor
 overwrite = True
 wms = ('')
-wms = WebMapService('https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi?')
 
 def main():
     dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
 
-    img = wms_params((-20037508.3427892,-20037508.3427892,20037508.3427892,20037508.3427892), '2021-09-21')
+    img = wms_params('2021-09-21', MODIS_Terra_CorrectedReflectance_TrueColor)
     os.chdir('test_outs')
 
     for d in dates:
-        img = wms_params((-20037508.3427892,-20037508.3427892,20037508.3427892,20037508.3427892), d)
+        img = wms_params(d, MODIS_Terra_CorrectedReflectance_TrueColor)
         out = open('MODIS_Terra_CorrectedReflectance_TrueColor' + d + '.png', 'wb')
         out.write(img.read())
         out.close()
         Image('MODIS_Terra_CorrectedReflectance_TrueColor' + d + '.png')
 
 
-
-
-
-
-
-
 # create new directory
 # Connect to GIBS WMS Service
 
-
-def wms_params(boxP, timeP):
-    img = wms.getmap(layers=['MODIS_Terra_CorrectedReflectance_TrueColor'],  # Layers
-                 srs='epsg:3857',  # Map projection
-                 bbox=boxP,  # Bounds
-                 size=(1200, 600),  # Image size
+def wms_params(timeP, layer):
+    wms = WebMapService('https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi?')
+    img = wms.getmap(layers= layer["layers"],  # Layers
+                 srs=layer["crs"],  # Map projection
+                 bbox=(layer["xmin"],layer["ymin"], layer["xmax"],layer["ymax"]),  # Bounds
+                 size=layer["size"],  # Image size
                  time=timeP,  # Time of data
-                 format='image/png',  # Image format
-                 transparent=True)  # Nodata transparency
+                 format=layer["format"],  # Image format
+                 transparent=layer["transparent"])  # Nodata transparency
     return img
 
 
