@@ -33,15 +33,16 @@ vta = VIIRS_NOAA20_Thermal_Anomalies_375m_All
 
 def main():
     dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
-
-    img = wms_req('2021-09-21', VIIRS_NOAA20_Thermal_Anomalies_375m_All)
-    print(img)
-    time.sleep(5)
-    os.chdir('test_outs')
-    out = open('vta_test' + '.png', 'wb')
-    out.write(img.read())
-    out.close()
-    Image('vta_test' + '.png')
+    imgdir_make([tcr, vta], dates, 'World')
+ 
+    #img = wms_req('2021-09-21', VIIRS_NOAA20_Thermal_Anomalies_375m_All)
+    #print(img)
+    #time.sleep(5)
+    #os.chdir('test_outs')
+    #out = open('vta_test' + '.png', 'wb')
+    #out.write(img.read())
+    #out.close()
+    #Image('vta_test' + '.png')
 
 
     #for d in dates:
@@ -49,9 +50,11 @@ def main():
         #out = open('VIIRS_NOAA20_Thermal_Anomalies_375m_All' + d + '.png', 'wb')
      
 # create new directory
+
 # Connect to GIBS WMS Service
 
 #Current version of wms_params takes the name of the layer to check format of time
+
 def wms_req(timeP, layer):
     if layer["Time_format"] == True:
         timeP = timeP + "T00:00:00Z"
@@ -68,9 +71,9 @@ def wms_req(timeP, layer):
 def imgdir_make(satname, date, region):
     #check if date is a list
     if isinstance(date, list):
-        for d in date:
-            d = d[0] + '_' + d[d]
-    pathname = region + '_' + date
+        dates = date
+        for d in dates:
+            pathname = region + '_' + dates
     if os.path.exists(pathname):
         print(pathname + "Directory already exists, overwrite? (y/n)")
         if input() == 'y':
@@ -87,10 +90,8 @@ def imgdir_make(satname, date, region):
             os.chdir(sat)
             os.chdir('..')
 
-
-
-
 # Configure request for MODIS_Terra_CorrectedReflectance_TrueColor
+
 """
 img = wms.getmap(layers=['MODIS_Terra_CorrectedReflectance_TrueColor'],  # Layers
                  srs='epsg:4326',  # Map projection
