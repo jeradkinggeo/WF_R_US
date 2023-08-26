@@ -30,16 +30,20 @@ wms = ('')
 
 tcr = MODIS_Terra_CorrectedReflectance_TrueColor
 vta = VIIRS_NOAA20_Thermal_Anomalies_375m_All
+layers = [tcr, vta]
+
+#Line 42, cannot concatenate str and list
 
 def main():
-    dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"] 
+    dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
     print(os.getcwd())
     os.chdir('test_outs')
-    for d in dates:
-        img = wms_req(d, MODIS_Terra_CorrectedReflectance_TrueColor)
-        with open('MODIS' + d + '.png', 'wb') as out:
-            out.write(img.read())
-            print(os.getcwd())
+    for sat in layers:  
+        for d in dates:
+            img = wms_req(d, sat)  
+            with open(sat[layers] + d + '.png', 'wb') as out:
+                out.write(img.read())
+                print(os.getcwd())
 
     #out = open('vta_test' + '.png', 'wb')
     #out.write(img.read())
