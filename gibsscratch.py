@@ -53,29 +53,39 @@ def main():
 
 #Current version of wms_params takes the name of the layer to check format of time
 def wms_req(timeP, layer):
-    if layer == MODIS_Terra_CorrectedReflectance_TrueColor:
-        wms = WebMapService(layer["wms"])
-        result = wms.getmap(layers= layer["layer"],  # Layers
-                    srs=layer["crs"],  # Map projection
-                    bbox=(layer["xmin"],layer["ymin"], layer["xmax"],layer["ymax"]),  # Bounds
-                    size=layer["size"],  # Image size
-                    time=timeP,  # Time of data
-                    format=layer["format"],  # Image format
-                    transparent=layer["transparent"])
-        return result
-    elif layer == VIIRS_NOAA20_Thermal_Anomalies_375m_All:
-        wms = WebMapService(layer["wms"])
-        result = wms.getmap(layers= layer["layer"],  # Layers
-                    srs=layer["crs"],  # Map projection
-                    bbox=(layer["xmin"],layer["ymin"], layer["xmax"],layer["ymax"]),  # Bounds
-                    size=layer["size"],  # Image size
-                    time=timeP + "T00:00:00Z",  # Time of data and print it
-                    format=layer["format"],  # Image format
-                    transparent=layer["transparent"])
-        return result
+    if layer["Time_format"] == True:
+        timeP = timeP + "T00:00:00Z"
+    wms = WebMapService(layer["wms"])
+    result = wms.getmap(layers= layer["layer"],  # Layers
+                srs=layer["crs"],  # Map projection
+                bbox=(layer["xmin"],layer["ymin"], layer["xmax"],layer["ymax"]),  # Bounds
+                size=layer["size"],  # Image size
+                time=timeP,  # Time of data
+                format=layer["format"],  # Image format
+                transparent=layer["transparent"])
+    return result
+
+def imgdir_make(satname, date, region):
+    #check if date is a list
+    if isinstance(date, list):
+        for d in date:
+            d = d[0] + '_' + d[d]
+    pathname = region + '_' + date
+    if os.path.exists(pathname):
+        print(pathname + "Directory already exists, overwrite? (y/n)")
+        if input() == 'y':
+            os.makedirs(pathname)
+            os.chdir(pathname)
+        else:
+            print("Aborting")
     else:
-        print("Layer not found")
-        return None
+        os.makedirs(pathname)
+        os.chdir(pathname)
+        #create subdirectories for each satellite
+        for sat in satname:
+            os.makedirs(sat)
+            os.chdir(sat)
+            os.chdir('..')
 
 
 

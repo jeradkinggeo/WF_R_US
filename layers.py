@@ -9,6 +9,7 @@ MODIS_Terra_CorrectedReflectance_TrueColor = {
     "size": (1200, 600),
     "format": "image/png",
     "transparent": True,
+    "Time_format": False
 
 }
 
@@ -27,6 +28,7 @@ VIIRS_NOAA20_Thermal_Anomalies_375m_All = {
     "size": (1200, 600),
     "format": "image/png",
     "transparent": True,
+    "Time_format": True
 
 }
 
