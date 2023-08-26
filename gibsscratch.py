@@ -30,15 +30,15 @@ wms = ('')
 
 tcr = MODIS_Terra_CorrectedReflectance_TrueColor
 vta = VIIRS_NOAA20_Thermal_Anomalies_375m_All
+os.chdir('..')
 
 def main():
-    dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
-    imgdir_make([tcr, vta], dates, 'World')
- 
-    #img = wms_req('2021-09-21', VIIRS_NOAA20_Thermal_Anomalies_375m_All)
-    #print(img)
-    #time.sleep(5)
-    #os.chdir('test_outs')
+    dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"] 
+    for d in dates:
+        img = wms_req(d, MODIS_Terra_CorrectedReflectance_TrueColor)
+        with open('MODIS' + d + '.png', 'wb') as out:
+            out.write(img.read())
+
     #out = open('vta_test' + '.png', 'wb')
     #out.write(img.read())
     #out.close()
@@ -68,6 +68,8 @@ def wms_req(timeP, layer):
                 transparent=layer["transparent"])
     return result
 
+
+#This doesnt work yet
 def imgdir_make(satname, date, region):
     #check if date is a list
     if isinstance(date, list):
