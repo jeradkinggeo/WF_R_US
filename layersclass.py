@@ -14,6 +14,7 @@ class layer:
         self.transparent = transparent
         self.Time_format = Time_format
 
+#Define a couple of layers
 
     def wms_req(self, timeP):
         if self.Time_format == True:
@@ -28,8 +29,30 @@ class layer:
                     transparent=self.transparent)
         return result
 
+#Define a couple of layers
+MODIS_Terra_CorrectedReflectance_TrueColor = layer(-20037508.3427892, 
+                                                   -20037508.3427892, 
+                                                   20037508.3427892, 
+                                                   20037508.3427892, 
+                                                   'EPSG:3857', 
+                                                   'https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi?', 
+                                                   'MODIS_Terra_CorrectedReflectance_TrueColor', 
+                                                   (1200, 600), 
+                                                   'image/png', 
+                                                   True, 
+                                                   False)
 
-    
+VIIRS_NOAA20_Thermal_Anomalies_375m_All = layer(-180, 
+                                                -90, 
+                                                180, 
+                                                90, 
+                                                'EPSG:4326', 
+                                                'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi', 
+                                                'VIIRS_NOAA20_Thermal_Anomalies_375m_All', 
+                                                (1200, 600), 
+                                                'image/png', 
+                                                True, 
+                                                True)
 
 
 

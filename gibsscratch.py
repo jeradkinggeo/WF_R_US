@@ -19,6 +19,7 @@ from owslib.wms import WebMapService
 from IPython.display import Image, display
 import os
 from layers import *
+import layersclass as lc
 import time
  
 overwrite = True
@@ -35,26 +36,28 @@ layers = [tcr, vta]
 #Line 42, cannot concatenate str and list
 
 def main():
-    dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
-    print(os.getcwd())
-    os.chdir('test_outs')
-    for sat in layers:  
-        for d in dates:
-            img = wms_req(d, sat)  
-            with open(sat[layers] + d + '.png', 'wb') as out:
-                out.write(img.read())
-                print(os.getcwd())
+    #Print on of the layers from layerclass.py
+    print(lc.layer(MODIS_Terra_CorrectedReflectance_TrueColor))
+    #lc.wms_req('2021-09-21', tcr)
+
+#    dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
+#    print(os.getcwd())
+#    os.chdir('test_outs')
+#    for sat in layers:  
+#        for d in dates:
+#            img = wms_req(d, sat)  
+#            with open(sat[layers] + d + '.png', 'wb') as out:
+#                out.write(img.read())
+#                print(os.getcwd())
 
     #out = open('vta_test' + '.png', 'wb')
     #out.write(img.read())
     #out.close()
     #Image('vta_test' + '.png')
 
-
     #for d in dates:
         #img = wms_params(d, VIIRS_NOAA20_Thermal_Anomalies_375m_All)
         #out = open('VIIRS_NOAA20_Thermal_Anomalies_375m_All' + d + '.png', 'wb')
-     
 # create new directory
 
 # Connect to GIBS WMS Service
