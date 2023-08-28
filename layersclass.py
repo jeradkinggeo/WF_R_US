@@ -1,7 +1,7 @@
 from owslib.wms import WebMapService
 
 class layer:
-    def __init__(self, xmin, ymin, xmax, ymax, crs, wms, layer_name, size, format, transparent, Time_format):
+    def __init__(self, xmin, ymin, xmax, ymax, crs, wms, layer_name, abr, size, format, transparent, Time_format):
         self.xmin = xmin
         self.ymin = ymin
         self.xmax = xmax
@@ -9,6 +9,7 @@ class layer:
         self.crs = crs
         self.wms = wms
         self.name = layer_name
+        self.abr = abr
         self.size = size
         self.format = format
         self.transparent = transparent
@@ -35,8 +36,9 @@ MODIS_Terra_CorrectedReflectance_TrueColor = layer(-20037508.3427892,
                                                    20037508.3427892, 
                                                    20037508.3427892, 
                                                    'EPSG:3857', 
-                                                   'https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi?', 
-                                                   ['MODIS_Terra_CorrectedReflectance_TrueColor'], 
+                                                   'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?', 
+                                                   ['MODIS_Terra_CorrectedReflectance_TrueColor'],
+                                                   'TCR', 
                                                    (1200, 600), 
                                                    'image/png', 
                                                    True, 
@@ -47,8 +49,9 @@ VIIRS_NOAA20_Thermal_Anomalies_375m_All = layer(-180,
                                                 180, 
                                                 90, 
                                                 'EPSG:4326', 
-                                                'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi', 
-                                                ['VIIRS_NOAA20_Thermal_Anomalies_375m_All'], 
+                                                'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?', 
+                                                ['VIIRS_NOAA20_Thermal_Anomalies_375m_All'],
+                                                'VTA', 
                                                 (1200, 600), 
                                                 'image/png', 
                                                 True, 

@@ -27,19 +27,20 @@ wms = ('')
 #main is for testing 
 
 #dates for certain layers may need to include T00:00:00Z
-test = lc.MODIS_Terra_CorrectedReflectance_TrueColor
+#test = lc.MODIS_Terra_CorrectedReflectance_TrueColor
 
-lc.MODIS_Terra_CorrectedReflectance_TrueColor.wms_req('2021-09-21')
-
+#lc.MODIS_Terra_CorrectedReflectance_TrueColor.wms_req('2021-09-21')
 
 #Line 42, cannot concatenate str and list
 
 def main():
-    lc.MODIS_Terra_CorrectedReflectance_TrueColor.wms_req('2021-09-21')
-    #Print on of the layers from layerclass.py
-    #lc.wms_req('2021-09-21', tcr)
-
-#    dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
+    satlist = [lc.MODIS_Terra_CorrectedReflectance_TrueColor, lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All]
+    dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
+    imgdir_make(satlist, dates[1::], 'World')
+    #img = satlist[1].wms_req(dates[1])
+    #with open('vta_test' + '.png', 'wb') as out:
+    #    out.write(img.read())
+    
 #    print(os.getcwd())
 #    os.chdir('test_outs')
 #    for sat in layers:  
@@ -72,38 +73,39 @@ def wms_req(timeP, layer):
 
 #This doesnt work yet
 def imgdir_make(satname, date, region):
-    #check if date is a list
-    if isinstance(date, list):
+    sat = satname
+    if isinstance(date, list) and isinstance(satname, list):
         dates = date
-        for d in dates:
-            pathname = region + '_' + dates
-    if os.path.exists(pathname):
-        print(pathname + "Directory already exists, overwrite? (y/n)")
-        if input() == 'y':
+        pri_dir = "Image Directory"
+        os.makedirs(pri_dir)
+        os.chdir(pri_dir)
+        for d in range(0, len(dates)):
+            pathname = region + '_' + dates[d]
             os.makedirs(pathname)
             os.chdir(pathname)
-        else:
-            print("Aborting")
+            for s in range(0, len(satname)):
+                img = satname[s].wms_req(dates[d])
+                with open(satname[s].abr + dates[d] + '.png', 'wb') as out:
+                    out.write(img.read())
+            os.chdir('..')      
+    elif isinstance(date, list):
+        dates = date
+        pri_dir = "Image Directory"
+        os.makedirs(pri_dir)
+        os.chdir(pri_dir)
+        for d in range(0, len(dates)):
+            pathname = region + '_' + dates[d]
+            os.makedirs(pathname)
+            os.chdir(pathname)
+            img = satname.wms_req(dates[d])
+            with open(satname.abr[0] + dates[d] + '.png', 'wb') as out:
+                out.write(img.read())
+        os.chdir('..')           
     else:
+        pathname = region + '_' + str(date)
         os.makedirs(pathname)
         os.chdir(pathname)
         #create subdirectories for each satellite
-        for sat in satname:
-            os.makedirs(sat)
-            os.chdir(sat)
-            os.chdir('..')
 
-# Configure request for MODIS_Terra_CorrectedReflectance_TrueColor
-
-"""
-img = wms.getmap(layers=['MODIS_Terra_CorrectedReflectance_TrueColor'],  # Layers
-                 srs='epsg:4326',  # Map projection
-                 bbox=(-180,-90,180,90),  # Bounds
-                 size=(1200, 600),  # Image size
-                 time='2021-09-21',  # Time of data
-                 format='image/png',  # Image format
-                 transparent=True)  # Nodata transparency
-"""
-# Save output PNG to a file
 if __name__ == "__main__":
     main()
