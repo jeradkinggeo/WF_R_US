@@ -26,36 +26,11 @@ wms = ('')
 
 #main is for testing 
 
-#dates for certain layers may need to include T00:00:00Z
-#test = lc.MODIS_Terra_CorrectedReflectance_TrueColor
-
-#lc.MODIS_Terra_CorrectedReflectance_TrueColor.wms_req('2021-09-21')
-
-#Line 42, cannot concatenate str and list
-
 def main():
     satlist = [lc.MODIS_Terra_CorrectedReflectance_TrueColor, lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All]
     dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
     imgdir_make(satlist, dates[1::], 'World')
-    #img = satlist[1].wms_req(dates[1])
-    #with open('vta_test' + '.png', 'wb') as out:
-    #    out.write(img.read())
-    
-#    print(os.getcwd())
-#    os.chdir('test_outs')
-#    for sat in layers:  
-#        for d in dates:
-#            img = wms_req(d, sat)  
-#            with open(sat[layers] + d + '.png', 'wb') as out:
-#                out.write(img.read())
-#                print(os.getcwd())
 
-    #out = open('vta_test' + '.png', 'wb')
-    #out.write(img.read())
-    #out.close()
-    #Image('vta_test' + '.png')
-
-#Current version of wms_params takes the name of the layer to check format of time
 
 def wms_req(timeP, layer):
     if layer["Time_format"] == True:
@@ -71,7 +46,6 @@ def wms_req(timeP, layer):
     return result
 
 
-#This doesnt work yet
 def imgdir_make(satname, date, region):
     sat = satname
     if isinstance(date, list) and isinstance(satname, list):
