@@ -18,7 +18,6 @@ import numpy as np
 from owslib.wms import WebMapService
 from IPython.display import Image, display
 import os
-from layers import *
 import layersclass as lc
 import time
  
@@ -28,16 +27,16 @@ wms = ('')
 #main is for testing 
 
 #dates for certain layers may need to include T00:00:00Z
+test = lc.MODIS_Terra_CorrectedReflectance_TrueColor
 
-tcr = MODIS_Terra_CorrectedReflectance_TrueColor
-vta = VIIRS_NOAA20_Thermal_Anomalies_375m_All
-layers = [tcr, vta]
+lc.MODIS_Terra_CorrectedReflectance_TrueColor.wms_req('2021-09-21')
+
 
 #Line 42, cannot concatenate str and list
 
 def main():
+    lc.MODIS_Terra_CorrectedReflectance_TrueColor.wms_req('2021-09-21')
     #Print on of the layers from layerclass.py
-    print(lc.layer(MODIS_Terra_CorrectedReflectance_TrueColor))
     #lc.wms_req('2021-09-21', tcr)
 
 #    dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
@@ -54,13 +53,6 @@ def main():
     #out.write(img.read())
     #out.close()
     #Image('vta_test' + '.png')
-
-    #for d in dates:
-        #img = wms_params(d, VIIRS_NOAA20_Thermal_Anomalies_375m_All)
-        #out = open('VIIRS_NOAA20_Thermal_Anomalies_375m_All' + d + '.png', 'wb')
-# create new directory
-
-# Connect to GIBS WMS Service
 
 #Current version of wms_params takes the name of the layer to check format of time
 

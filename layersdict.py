@@ -1,4 +1,4 @@
-MODIS_Terra_CorrectedReflectance_TrueColor = {
+MODIS_Terra_CorrectedReflectance_TrueColor_dpc = {
     "xmin": -20037508.3427892,
     "ymin": -20037508.3427892,
     "xmax": 20037508.3427892,
@@ -17,7 +17,7 @@ MODIS_Terra_CorrectedReflectance_TrueColor = {
 #Uses wms service and converts vector to png image
 #note different projection and bounds
 
-VIIRS_NOAA20_Thermal_Anomalies_375m_All = {
+VIIRS_NOAA20_Thermal_Anomalies_375m_All_dpc = {
     "xmin": -180,
     "ymin": -90,
     "xmax": 180,
