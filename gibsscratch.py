@@ -28,8 +28,9 @@ wms = ('')
 
 def main():
     satlist = [lc.MODIS_Terra_CorrectedReflectance_TrueColor, lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All]
-    dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
-    imgdir_make(satlist, dates[1::], 'World')
+    satlist[0].wms_resp(wms)
+    #dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
+    #imgdir_make(satlist, dates[1::], 'World')
 
 
 def wms_req(timeP, layer):

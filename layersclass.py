@@ -1,4 +1,7 @@
 from owslib.wms import WebMapService
+import requests
+import xml.etree.ElementTree as xmlet
+import lxml.etree as xmltree
 
 class layer:
     def __init__(self, xmin, ymin, xmax, ymax, crs, wms, layer_name, abr, size, format, transparent, Time_format):
@@ -15,7 +18,13 @@ class layer:
         self.transparent = transparent
         self.Time_format = Time_format
 
-#Define a couple of layers
+    def wms_resp(self, wms):
+            wmsUrl = wms
+            response = requests.get(wmsUrl)
+            WmsXml = xmltree.fromstring(response.content)
+            result = print(xmltree.tostring(WmsXml, pretty_print = True, encoding = str))
+            return result
+
 
     def wms_req(self, timeP):
         if self.Time_format == True:
