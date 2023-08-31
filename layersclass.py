@@ -36,9 +36,7 @@ class layer:
         wmsUrl = wmsURL + 'service=WMS&version=1.1.1&request=GetCapabilities'
         response = requests.get(wmsUrl)
         WmsTree = xmltree.fromstring(response.content)
-
-
-        self.name = layerName
+        layerName = self.name
         for child in WmsTree.iter():
             if child.tag == '{http://www.opengis.net/wms}WMS_Capabilities': 
                 print('Version: ' +child.get('version'))
