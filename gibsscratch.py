@@ -31,18 +31,6 @@ wms = ('')
 #    dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
 #    imgdir_make(satlist, dates[1::], 'World')
 
-def main():
-    wmsUrl = 'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?\
-    SERVICE=WMS&REQUEST=GetCapabilities'
-    response = requests.get(wmsUrl)
-    WmsXml = xmltree.fromstring(response.content)
-    print(xmltree.tostring(WmsXml, pretty_print = True, encoding = str))
-    os.mkdir('WMS_Response_capabilities')
-    os.chdir('WMS_Response_capabilities')
-    with open('WMS_Response_capabilities.xml', 'wb') as file:
-        file.write(response.content)
-
-
 
 def wms_req(timeP, layer):
     if layer["Time_format"] == True:

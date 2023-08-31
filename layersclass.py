@@ -1,5 +1,6 @@
 from owslib.wms import WebMapService
 import requests
+import lxml.etree as xmltree
 
 class layer:
     def __init__(self, xmin, ymin, xmax, ymax, crs, wms, layer_name, abr, 
@@ -29,6 +30,73 @@ class layer:
                     format=self.format,  # Image format
                     transparent=self.transparent)
         return result
+
+    def layer_attr(self, name, wms):
+        wmsURL = wms
+        wmsUrl = wmsURL + 'service=WMS&version=1.1.1&request=GetCapabilities'
+        response = requests.get(wmsUrl)
+        WmsTree = xmltree.fromstring(response.content)
+
+
+        self.name = layerName
+        for child in WmsTree.iter():
+            if child.tag == '{http://www.opengis.net/wms}WMS_Capabilities': 
+                print('Version: ' +child.get('version'))
+            
+            if child.tag == '{http://www.opengis.net/wms}Service': 
+                print('Service: ' +child.find("{http://www.opengis.net/wms}Name").text)
+                
+            if child.tag == '{http://www.opengis.net/wms}Request': 
+                print('Request: ')
+                for e in child:
+                    print('\t ' + e.tag.partition('}')[2])
+                                    
+                all = child.findall(".//{http://www.opengis.net/wms}Format")
+                if all is not None:
+                    print("Format: ")
+                    for g in all:
+                        print("\t " + g.text)     
+                        
+                for e in child.iter():
+                    if e.tag == "{http://www.opengis.net/wms}OnlineResource":
+                        print('URL: ' + e.get('{http://www.w3.org/1999/xlink}href'))
+                        break
+
+                for child in WmsTree.iter():
+                    for layer in child.findall("./{http://www.opengis.net/wms}Capability/{http://www.opengis.net/wms}Layer//*/"): 
+                        if layer.tag == '{http://www.opengis.net/wms}Layer': 
+                            f = layer.find("{http://www.opengis.net/wms}Name")
+                            if f is not None:
+                                if f.text == layerName:
+                                    # Layer name.
+                                    print('Layer: ' + f.text)
+                                    
+                                    # All elements and attributes:
+                                    # CRS
+                                    e = layer.find("{http://www.opengis.net/wms}CRS")
+                                    if e is not None:
+                                        print('\t CRS: ' + e.text)
+                                    
+                                    # BoundingBox.
+                                    e = layer.find("{http://www.opengis.net/wms}EX_GeographicBoundingBox")
+                                    if e is not None:
+                                        print('\t LonMin: ' + e.find("{http://www.opengis.net/wms}westBoundLongitude").text)
+                                        print('\t LonMax: ' + e.find("{http://www.opengis.net/wms}eastBoundLongitude").text)
+                                        print('\t LatMin: ' + e.find("{http://www.opengis.net/wms}southBoundLatitude").text)
+                                        print('\t LatMax: ' + e.find("{http://www.opengis.net/wms}northBoundLatitude").text)
+                                    
+                                    # Time extent.
+                                    e = layer.find("{http://www.opengis.net/wms}Dimension")
+                                    if e is not None:
+                                        print('\t TimeExtent: ' + e.text)
+                                        
+                                    # Style.
+                                    e = layer.find("{http://www.opengis.net/wms}Style")
+                                    if e is not None:
+                                        f = e.find("{http://www.opengis.net/wms}Name")
+                                        if f is not None:
+                                            print('\t Style: ' + f.text)
+
 
 #Define a couple of layers
 MODIS_Terra_CorrectedReflectance_TrueColor = layer(-20037508.3427892, 
