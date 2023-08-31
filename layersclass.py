@@ -1,7 +1,9 @@
 from owslib.wms import WebMapService
+import requests
 
 class layer:
-    def __init__(self, xmin, ymin, xmax, ymax, crs, wms, layer_name, abr, size, format, transparent, Time_format):
+    def __init__(self, xmin, ymin, xmax, ymax, crs, wms, layer_name, abr, 
+                 size, format, transparent, Time_format):
         self.xmin = xmin
         self.ymin = ymin
         self.xmax = xmax
@@ -14,8 +16,6 @@ class layer:
         self.format = format
         self.transparent = transparent
         self.Time_format = Time_format
-
-#Define a couple of layers
 
     def wms_req(self, timeP):
         if self.Time_format == True:

@@ -26,10 +26,22 @@ wms = ('')
 
 #main is for testing 
 
+#def main():
+#    satlist = [lc.MODIS_Terra_CorrectedReflectance_TrueColor, lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All]
+#    dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
+#    imgdir_make(satlist, dates[1::], 'World')
+
 def main():
-    satlist = [lc.MODIS_Terra_CorrectedReflectance_TrueColor, lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All]
-    dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
-    imgdir_make(satlist, dates[1::], 'World')
+    wmsUrl = 'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?\
+    SERVICE=WMS&REQUEST=GetCapabilities'
+    response = requests.get(wmsUrl)
+    WmsXml = xmltree.fromstring(response.content)
+    print(xmltree.tostring(WmsXml, pretty_print = True, encoding = str))
+    os.mkdir('WMS_Response_capabilities')
+    os.chdir('WMS_Response_capabilities')
+    with open('WMS_Response_capabilities.xml', 'wb') as file:
+        file.write(response.content)
+
 
 
 def wms_req(timeP, layer):
@@ -59,7 +71,7 @@ def imgdir_make(satname, date, region):
             os.chdir(pathname)
             for s in range(0, len(satname)):
                 img = satname[s].wms_req(dates[d])
-                with open(satname[s].abr + "_" dates[d] + '.png', 'wb') as out:
+                with open(satname[s].abr + "_" + dates[d] + '.png', 'wb') as out:
                     out.write(img.read())
             os.chdir('..')      
     elif isinstance(date, list):
