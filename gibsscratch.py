@@ -28,16 +28,9 @@ wms = ('')
 
 def main():
     satlist = [lc.MODIS_Terra_CorrectedReflectance_TrueColor, lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All]
-<<<<<<< HEAD
     satlist[0].wms_resp(wms)
     #dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
     #imgdir_make(satlist, dates[1::], 'World')
-=======
-    dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
-    imgdir_make(satlist, dates[1::], 'World')
-    #lc.layer_attr(lc.MODIS_Terra_CorrectedReflectance_TrueColor.name, 
-    #              lc.MODIS_Terra_CorrectedReflectance_TrueColor.wms)
->>>>>>> d9191fd574d0a0e310f4da3e7a36a31d907655a0
 
 
 def wms_req(timeP, layer):
