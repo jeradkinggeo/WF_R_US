@@ -60,7 +60,7 @@ def imgdir_make(satname, date, region):
             os.chdir(pathname)
             for s in range(0, len(satname)):
                 img = satname[s].wms_req(dates[d])
-                with open(satname[s].abr + dates[d] + '.png', 'wb') as out:
+                with open(satname[s].abr + "_" + dates[d] + '.png', 'wb') as out:
                     out.write(img.read())
             os.chdir('..')      
     elif isinstance(date, list):
