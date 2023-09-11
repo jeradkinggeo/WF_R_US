@@ -3,13 +3,15 @@ from fiona.crs import to_string
 from shapely.geometry import shape, mapping
 import os
 
-os.chdir(r"C:\Users\jerad_kpmetvk\Desktop\WFDir\WF_R_US\ArcTools\Test Shapes")
-
 input_shapefile = "input.shp"
 output_shapefile = "output.shp"
 
 def main():
+    os.chdir(r"C:\Users\jerad_kpmetvk\Desktop\WFDir\WF_R_US\ArcTools\TestShapes")
+    filter_shapefile_fields("input.shp", "output.shp")
     print("Filtering shapefile fields...")
+    append_fields_to_shapefile("output.shp", "3-10-2000", "9-12-2002", "Url.com", "Big Fire", "output_with_fields.shp")
+    
 
 
 def filter_shapefile_fields(input_shapefile, output_shapefile):
@@ -47,22 +49,14 @@ def filter_shapefile_fields(input_shapefile, output_shapefile):
     print(f"Filtered shapefile saved to {output_shapefile}")
 
 
-def append_fields_to_shapefile(input_shapefile, output_shapefile):
+def append_fields_to_shapefile(input_shapefile, Start_Date, End_Date, Source, Fire_Name, output_shapefile):
     # Open the input shapefile
     with fiona.open(input_shapefile, 'r') as source:
-
-        # Copy the existing schema and add new fields
-        output_schema = source.schema.copy()
-        output_schema['properties']['Start_Date'] = 'str:80'  # String field with max length of 80
-        output_schema['properties']['End_Date'] = 'float'   # Float field
-        output_schema['properties']['Source'] = 'int'     # Integer field
-        output_schema['properties']['Fire Name'] = 'str:80'  # Another string field with max length of 80
 
         # Write the output shapefile with the new fields
         with fiona.open(output_shapefile, 'w',
                         crs=to_string(source.crs),
-                        driver=source.driver,
-                        schema=output_schema) as dest:
+                        driver=source.driver,) as dest:
 
             for feature in source:
                 # Copy existing feature attributes and geometry
@@ -72,19 +66,14 @@ def append_fields_to_shapefile(input_shapefile, output_shapefile):
                 }
 
                 # Populate new fields with default values (you can adjust these)
-                output_feature['properties']['Field1'] = "default_value1"
-                output_feature['properties']['Field2'] = 0.0
-                output_feature['properties']['Field3'] = 0
-                output_feature['properties']['Field4'] = "default_value4"
+                output_feature['properties']['Start_Date'] = Start_Date
+                output_feature['properties']['End_date']  = End_Date
+                output_feature['properties']['Source'] = Source
+                output_feature['properties']['Fire Name'] = Fire_Name   
 
                 dest.write(output_feature)
 
     print(f"Shapefile with appended fields saved to {output_shapefile}")
-
-# Example usage
-append_fields_to_shapefile("input.shp", "output_with_fields.shp")
-
-
 
 
 if __name__ == "__main__":
