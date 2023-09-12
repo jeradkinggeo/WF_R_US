@@ -28,9 +28,10 @@ wms = ('')
 
 def main():
     satlist = [lc.MODIS_Terra_CorrectedReflectance_TrueColor, lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All]
-    satlist[0].wms_resp(wms)
-    #dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
-    #imgdir_make(satlist, dates[1::], 'World')
+    dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
+    #Note, Imgdir_make includes the WMS Req function. Perhaps
+    #modify the naming scheme to make this more clear?
+    imgdir_make(satlist, dates[1::], 'World')
 
 
 def wms_req(timeP, layer):
@@ -52,7 +53,6 @@ def imgdir_make(satname, date, region):
     if isinstance(date, list) and isinstance(satname, list):
         dates = date
         pri_dir = "Image Directory"
-        os.makedirs(pri_dir)
         os.chdir(pri_dir)
         for d in range(0, len(dates)):
             pathname = region + '_' + dates[d]
@@ -66,7 +66,6 @@ def imgdir_make(satname, date, region):
     elif isinstance(date, list):
         dates = date
         pri_dir = "Image Directory"
-        os.makedirs(pri_dir)
         os.chdir(pri_dir)
         for d in range(0, len(dates)):
             pathname = region + '_' + dates[d]
