@@ -10,7 +10,7 @@ def main():
     os.chdir(r"C:\Users\jerad_kpmetvk\Desktop\WFDir\WF_R_US\ArcTools\TestShapes")
     filter_shapefile_fields("input.shp", "output.shp")
     print("Filtering shapefile fields...")
-    append_fields_to_shapefile("output.shp", "3-10-2000", "9-12-2002", "Url.com", "Big Fire", "output_with_fields.shp")
+    append_fields_to_shapefile("output.shp",  "output_with_fields.shp", "3-10-2000", "9-12-2002", "Url.com", "Big Fire")
     
 
 
@@ -49,31 +49,44 @@ def filter_shapefile_fields(input_shapefile, output_shapefile):
     print(f"Filtered shapefile saved to {output_shapefile}")
 
 
-def append_fields_to_shapefile(input_shapefile, Start_Date, End_Date, Source, Fire_Name, output_shapefile):
+def append_fields_to_shapefile(input_shapefile, output_shapefile, start_date, end_date, fire_name, source_name):
     # Open the input shapefile
-    with fiona.open(input_shapefile, 'r') as source:
-
+    with fiona.open(input_shapefile, 'r') as source_file:
+        
+        # Create a new schema with only geometry and the new fields
+        output_schema = {
+            'geometry': source_file.schema['geometry'],
+            'properties': {
+                'StartDate': 'str:80',
+                'EndDate': 'str:80',
+                'FireName': 'str:80',
+                'SourceName': 'str:80'
+            }
+        }
+        
         # Write the output shapefile with the new fields
         with fiona.open(output_shapefile, 'w',
-                        crs=to_string(source.crs),
-                        driver=source.driver,) as dest:
-
-            for feature in source:
-                # Copy existing feature attributes and geometry
+                        crs=to_string(source_file.crs),
+                        driver=source_file.driver,
+                        schema=output_schema) as dest:
+            
+            for feature in source_file:
+                # Copy the geometry
                 output_feature = {
                     'geometry': mapping(shape(feature['geometry'])),
-                    'properties': feature['properties'].copy()
+                    'properties': {}
                 }
-
-                # Populate new fields with default values (you can adjust these)
-                output_feature['properties']['Start_Date'] = Start_Date
-                output_feature['properties']['End_date']  = End_Date
-                output_feature['properties']['Source'] = Source
-                output_feature['properties']['Fire Name'] = Fire_Name   
-
+                
+                # Populate new fields with the values passed to the function
+                output_feature['properties']['StartDate'] = start_date
+                output_feature['properties']['EndDate'] = end_date
+                output_feature['properties']['FireName'] = fire_name
+                output_feature['properties']['SourceName'] = source_name
+                
                 dest.write(output_feature)
 
     print(f"Shapefile with appended fields saved to {output_shapefile}")
+
 
 
 if __name__ == "__main__":
