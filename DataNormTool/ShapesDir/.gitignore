@@ -1,0 +1,16 @@
+# Shapefile components
+*.shp
+*.shx
+*.dbf
+*.prj
+*.sbn
+*.sbx
+*.cpg
+*.shp.xml
+*.qpj
+*.lyr
+*.lyrx
+
+# Optional: If you have .zip or .tar.gz archives of shapefiles
+*.zip
+*.tar.gz

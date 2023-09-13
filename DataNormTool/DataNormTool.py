@@ -4,7 +4,7 @@ from shapely.geometry import shape, mapping
 import os
 import time
 
-def find_shapefile_in_directory(DataDir):
+def shapefile_finder(DataDir):
     # Get the current working directory
     current_directory = os.getcwd()
 
@@ -29,7 +29,7 @@ def find_shapefile_in_directory(DataDir):
     else:
         return None, None
 
-def append_fields_to_shapefile(input_shapefile, ShpDir, start_date, end_date, fire_name, source_name):
+def shapefile_normalization(input_shapefile, ShpDir, start_date, end_date, fire_name, source_name):
     # Change working directory to ShpDir
     os.chdir(ShpDir)
 
