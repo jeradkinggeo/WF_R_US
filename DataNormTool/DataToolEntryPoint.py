@@ -5,8 +5,9 @@ import os
 import DataNormTool as dn
 
 def main():
-    [inp, path] = dn.find_shapefile_in_directory("ShapesDir")
-    dn.append_fields_to_shapefile(inp, path, "3-10-2000", "9-12-2002", "BigFire", "URL.com")
+    [inp, path] = dn.shapefile_finder("ShapesDir")
+    print("Caution ")
+    dn.shapefile_normalization(inp, path, "3-10-2000", "9-12-2002", "BigFire", "URL.com")
 
 
 if __name__ == "__main__":

@@ -27,32 +27,21 @@ wms = ('')
 #main is for testing 
 
 def main():
-    satlist = [lc.MODIS_Terra_CorrectedReflectance_TrueColor, lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All]
+    satlist = [lc.MODIS_Terra_CorrectedReflectance_TrueColor, 
+               lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All,
+               lc.MODIS_Aqua_Terra_AOD,
+               ]
     dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
-    #Note, Imgdir_make includes the WMS Req function. Perhaps
-    #modify the naming scheme to make this more clear?
-    imgdir_make(satlist, dates[1::], 'World')
+    #Note, Imgdir_make includes the WMS Req function.    
+    layer_pull(satlist, dates[1::], 'World')
 
 
-def wms_req(timeP, layer):
-    if layer["Time_format"] == True:
-        timeP = timeP + "T00:00:00Z"
-    wms = WebMapService(layer["wms"])
-    result = wms.getmap(layers= layer["layer"],  # Layers
-                srs=layer["crs"],  # Map projection
-                bbox=(layer["xmin"],layer["ymin"], layer["xmax"],layer["ymax"]),  # Bounds
-                size=layer["size"],  # Image size
-                time=timeP,  # Time of data
-                format=layer["format"],  # Image format
-                transparent=layer["transparent"])
-    return result
-
-
-def imgdir_make(satname, date, region):
+def layer_pull(satname, date, region):
     sat = satname
     if isinstance(date, list) and isinstance(satname, list):
         dates = date
-        pri_dir = "Image Directory"
+        pri_dir = "Image_Directory"
+        os.chdir("WMS_API_Tool")
         os.chdir(pri_dir)
         for d in range(0, len(dates)):
             pathname = region + '_' + dates[d]
@@ -65,7 +54,8 @@ def imgdir_make(satname, date, region):
             os.chdir('..')      
     elif isinstance(date, list):
         dates = date
-        pri_dir = "Image Directory"
+        os.chdir("WMS_API_Tool")
+        pri_dir = "Image_Directory"
         os.chdir(pri_dir)
         for d in range(0, len(dates)):
             pathname = region + '_' + dates[d]

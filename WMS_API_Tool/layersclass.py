@@ -132,7 +132,15 @@ VIIRS_NOAA20_Thermal_Anomalies_375m_All = layer(-180,
                                                 True, 
                                                 True)
 
-
-
-    
-
+MODIS_Aqua_Terra_AOD = layer(-180, 
+                         -90, 
+                           180, 
+                           90, 
+                           'EPSG:4326', 
+                           'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?', 
+                            ['MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth'],
+                            'MODIS_Terra_AOD', 
+                             (1200, 600), 
+                             'image/png', 
+                              True, 
+                              True)
