@@ -4,7 +4,9 @@ from shapely.geometry import shape, mapping
 import os
 import DataNormTool as dn
 
+#
 
+print("THE KIWI TEST WAHOOOOOOO")
 
 def main():
     [inp, path] = dn.find_shapefile_in_directory("ShapesDir")
