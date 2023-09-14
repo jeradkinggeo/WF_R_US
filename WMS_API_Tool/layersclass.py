@@ -2,6 +2,7 @@ from owslib.wms import WebMapService
 import requests
 import xml.etree.ElementTree as xmlet
 import lxml.etree as xmltree
+import os
 
 class layer:
     def __init__(self, xmin, ymin, xmax, ymax, crs, wms, layer_name, abr, 
