@@ -39,8 +39,8 @@ class layer:
                     transparent=self.transparent)
         return result
     
-    def layer_attr(self, name, wms):
-        wmsURL = wms
+    def layer_attr(self):
+        wmsURL = self.wms
         wmsUrl = wmsURL + 'service=WMS&version=1.1.1&request=GetCapabilities'
         response = requests.get(wmsUrl)
         WmsTree = xmltree.fromstring(response.content)
