@@ -19,12 +19,12 @@ from owslib.wms import WebMapService
 from IPython.display import Image, display
 import os
 import layersclass as lc
+from layersclass import layer
 import time
- 
-overwrite = True
-wms = ('')
 
-#main is for testing 
+
+
+overwrite = True
 
 def main():
     satlist = [lc.MODIS_Terra_CorrectedReflectance_TrueColor, 
@@ -33,9 +33,9 @@ def main():
                ]
     dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
     #Note, Imgdir_make includes the WMS Req function.    
-    layer_pull(satlist, dates[1::], 'World')
-
-
+    #layer_pull(satlist, dates[1::], 'World')
+    #print(satlist[0].layer_attr(satlist[0].wms))
+    
 def layer_pull(satname, date, region):
     sat = satname
     if isinstance(date, list) and isinstance(satname, list):

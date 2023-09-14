@@ -26,7 +26,6 @@ class layer:
             result = print(xmltree.tostring(WmsXml, pretty_print = True, encoding = str))
             return result
 
-
     def wms_req(self, timeP):
         if self.Time_format == True:
             timeP = timeP + "T00:00:00Z"
@@ -39,7 +38,7 @@ class layer:
                     format=self.format,  # Image format
                     transparent=self.transparent)
         return result
-
+    
     def layer_attr(self, name, wms):
         wmsURL = wms
         wmsUrl = wmsURL + 'service=WMS&version=1.1.1&request=GetCapabilities'
@@ -105,7 +104,7 @@ class layer:
                                             print('\t Style: ' + f.text)
 
 
-#Define a couple of layers
+#Defining layers
 MODIS_Terra_CorrectedReflectance_TrueColor = layer(-20037508.3427892, 
                                                    -20037508.3427892, 
                                                    20037508.3427892, 
