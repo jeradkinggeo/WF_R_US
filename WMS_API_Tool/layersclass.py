@@ -2,15 +2,26 @@ from owslib.wms import WebMapService
 import requests
 import xml.etree.ElementTree as xmlet
 import lxml.etree as xmltree
+import geopandas as gpd
 import os
+import sys
+import bbox_calc as bc
+import DataNormTool as dn
+
+def main():
+    shapefile_path = 'path_to_your_shapefile.shp'
+    extents = bc.compute_extents_from_shapefile(shapefile_path)
+    # Print the extents
+    for idx, extent in enumerate(extents):
+        print(f"Extent for Centroid {idx + 1}:")
+        print(f"xmin: {extent[0]}, ymin: {extent[1]}, xmax: {extent[2]}, ymax: {extent[3]}")
+        print() 
+
 
 class layer:
-    def __init__(self, xmin, ymin, xmax, ymax, crs, wms, layer_name, abr, 
-                 size, format, transparent, Time_format):
-        self.xmin = xmin
-        self.ymin = ymin
-        self.xmax = xmax
-        self.ymax = ymax
+    def __init__(self, crs, wms, layer_name, abr, 
+                 size, format, transparent, Time_format, 
+                 xmin = None, ymin = None , xmax = None, ymax = None):
         self.crs = crs
         self.wms = wms
         self.name = layer_name
@@ -19,6 +30,10 @@ class layer:
         self.format = format
         self.transparent = transparent
         self.Time_format = Time_format
+        self.xmin = xmin
+        self.ymin = ymin
+        self.xmax = xmax
+        self.ymax = ymax
 
     def wms_resp(self, wms):
             wmsUrl = wms
@@ -39,6 +54,16 @@ class layer:
                     format=self.format,  # Image format
                     transparent=self.transparent)
         return result
+    
+    def bound_pass(self, xmin, ymin, xmax, ymax):
+        shpname, shpfp =  dn.shapefile_finder("ShapesDir")
+        bounds = bc.compute_extents_from_shapefile(shpfp)
+        self.xmin = xmin
+        self.ymin = ymin
+        self.xmax = xmax
+        self.ymax = ymax
+
+
     
     def layer_attr(self):
         wmsURL = self.wms
@@ -144,3 +169,54 @@ MODIS_Aqua_Terra_AOD = layer(-180,
                              'image/png', 
                               True, 
                               True)
+
+def layer_pull(satname, date, region):
+    sat = satname
+    if isinstance(date, list) and isinstance(satname, list):
+        dates = date
+        pri_dir = "Image_Directory"
+        os.chdir("WMS_API_Tool")
+        if os.path.exists(pri_dir):        
+            os.chdir(pri_dir)
+            for d in range(0, len(dates)):
+                pathname = region + '_' + dates[d]
+                os.makedirs(pathname)
+                os.chdir(pathname)
+                for s in range(0, len(satname)):
+                    img = satname[s].wms_req(dates[d])
+                    with open(satname[s].abr + "_" + dates[d] + '.png', 'wb') as out:
+                        out.write(img.read())
+                os.chdir('..')
+        else:
+            os.mkdir(pri_dir)
+            os.chdir(pri_dir)
+            for d in range(0, len(dates)):
+                pathname = region + '_' + dates[d]
+                os.makedirs(pathname)
+                os.chdir(pathname)
+                for s in range(0, len(satname)):
+                    img = satname[s].wms_req(dates[d])
+                    with open(satname[s].abr + "_" + dates[d] + '.png', 'wb') as out:
+                        out.write(img.read())
+                os.chdir('..')
+    elif isinstance(date, list):
+        dates = date
+        os.chdir("WMS_API_Tool")
+        pri_dir = "Image_Directory"
+        os.chdir(pri_dir)
+        for d in range(0, len(dates)):
+            pathname = region + '_' + dates[d]
+            os.makedirs(pathname)
+            os.chdir(pathname)
+            img = satname.wms_req(dates[d])
+            with open(satname.abr[0] + dates[d] + '.png', 'wb') as out:
+                out.write(img.read())
+        os.chdir('..')           
+    else:
+        pathname = region + '_' + str(date)
+        os.makedirs(pathname)
+        os.chdir(pathname)
+        #create subdirectories for each satellite
+
+if __name__ == "__main__":
+    main()
