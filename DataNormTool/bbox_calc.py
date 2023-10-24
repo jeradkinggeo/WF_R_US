@@ -69,7 +69,7 @@ def compute_extents_from_shapefile(shapefile_path):
         ]
         return corners
     
-    def get_extent_from_corners(corners):
+    def corner_pull(corners):
         x_values = [corner[0] for corner in corners]
         y_values = [corner[1] for corner in corners]
         return (min(x_values), min(y_values), max(x_values), max(y_values))
@@ -80,7 +80,7 @@ def compute_extents_from_shapefile(shapefile_path):
     extent = shapefile_extent(gdf)
 
     corners_list = [bounding_box_corners(centroid, extent) for centroid in centroids]
-    extents_list = [get_extent_from_corners(corners) for corners in corners_list]
+    extents_list = [corner_pull(corners) for corners in corners_list]
 
     return extents_list
 

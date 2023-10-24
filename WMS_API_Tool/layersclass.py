@@ -5,7 +5,7 @@ import lxml.etree as xmltree
 import geopandas as gpd
 import os
 import sys
-import bbox_calc as bc
+from DataNormTool import bbox_calc as bc
 import DataNormTool as dn
 
 def main():
@@ -57,7 +57,9 @@ class layer:
     
     def bound_pass(self, xmin, ymin, xmax, ymax):
         shpname, shpfp =  dn.shapefile_finder("ShapesDir")
-        bounds = bc.compute_extents_from_shapefile(shpfp)
+        cent = bc.shp_centroid(shpfp)
+        extent = bc.shapefile_extent(shpfp)
+        bound_corn = bc.bounding_box_corners(cent, extent)
         self.xmin = xmin
         self.ymin = ymin
         self.xmax = xmax
