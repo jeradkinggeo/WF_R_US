@@ -33,56 +33,10 @@ def main():
                ]
     dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
     #Note, Imgdir_make includes the WMS Req function.    
-    layer_pull(satlist, dates[1::], 'World')
+    lc.layer_pull(satlist, dates[1::], 'World')
     #print(satlist[0].layer_attr(satlist[0].wms))
     
-def layer_pull(satname, date, region):
-    sat = satname
-    if isinstance(date, list) and isinstance(satname, list):
-        dates = date
-        pri_dir = "Image_Directory"
-        os.chdir("WMS_API_Tool")
-        if os.path.exists(pri_dir):        
-            os.chdir(pri_dir)
-            for d in range(0, len(dates)):
-                pathname = region + '_' + dates[d]
-                os.makedirs(pathname)
-                os.chdir(pathname)
-                for s in range(0, len(satname)):
-                    img = satname[s].wms_req(dates[d])
-                    with open(satname[s].abr + "_" + dates[d] + '.png', 'wb') as out:
-                        out.write(img.read())
-                os.chdir('..')
-        else:
-            os.mkdir(pri_dir)
-            os.chdir(pri_dir)
-            for d in range(0, len(dates)):
-                pathname = region + '_' + dates[d]
-                os.makedirs(pathname)
-                os.chdir(pathname)
-                for s in range(0, len(satname)):
-                    img = satname[s].wms_req(dates[d])
-                    with open(satname[s].abr + "_" + dates[d] + '.png', 'wb') as out:
-                        out.write(img.read())
-                os.chdir('..')
-    elif isinstance(date, list):
-        dates = date
-        os.chdir("WMS_API_Tool")
-        pri_dir = "Image_Directory"
-        os.chdir(pri_dir)
-        for d in range(0, len(dates)):
-            pathname = region + '_' + dates[d]
-            os.makedirs(pathname)
-            os.chdir(pathname)
-            img = satname.wms_req(dates[d])
-            with open(satname.abr[0] + dates[d] + '.png', 'wb') as out:
-                out.write(img.read())
-        os.chdir('..')           
-    else:
-        pathname = region + '_' + str(date)
-        os.makedirs(pathname)
-        os.chdir(pathname)
-        #create subdirectories for each satellite
+
 
 if __name__ == "__main__":
     main()
