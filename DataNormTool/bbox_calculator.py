@@ -11,8 +11,9 @@ def main():
     shpname, shpfp =  shapefile_finder("ShapesDir")
     shapefile_path = shpfp
     gdf = gpd.read_file(shapefile_path)
-    centroids = compute_shapefile_centroid(shapefile_path)
-    extent = shapefile_extent(gdf)
+    centroids = shp_centroid(shapefile_path)
+    extent = shp_extent(shapefile_path)
+    print(extent)
 
     # Plotting
     fig, ax = plt.subplots()
@@ -32,12 +33,13 @@ def main():
     plt.show()
 
 
-def compute_shapefile_centroid(shapefile_path):
+def shp_centroid(shapefile_path):
     gdf = gpd.read_file(shapefile_path)
     centroids = gdf.geometry.centroid
     return centroids
 
-def shapefile_extent(gdf):
+def shp_extent(shapefile_path):
+    gdf = gpd.read_file(shapefile_path)
     bounds = gdf.total_bounds
     return (bounds[0], bounds[1], bounds[2], bounds[3])
 

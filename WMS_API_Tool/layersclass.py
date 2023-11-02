@@ -5,12 +5,9 @@ import lxml.etree as xmltree
 import os
 
 class layer:
-    def __init__(self, xmin, ymin, xmax, ymax, crs, wms, layer_name, abr, 
+    def __init__(self, crs, wms, layer_name, abr, 
                  size, format, transparent, Time_format):
-        self.xmin = xmin
-        self.ymin = ymin
-        self.xmax = xmax
-        self.ymax = ymax
+        self.xmin, self.ymin, self.xmax, self.ymax = None, None, None, None
         self.crs = crs
         self.wms = wms
         self.name = layer_name
@@ -89,10 +86,9 @@ def layer_pull(satname, date, region):
         #create subdirectories for each satellite
 
 #Defining layers
-MODIS_Terra_CorrectedReflectance_TrueColor = layer(-20037508.3427892, 
-                                                   -20037508.3427892, 
-                                                   20037508.3427892, 
-                                                   20037508.3427892, 
+
+#Need a function to convert the bounds of the shapefile to the correct crs
+MODIS_Terra_CorrectedReflectance_TrueColor = layer(
                                                    'EPSG:3857', 
                                                    'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?', 
                                                    ['MODIS_Terra_CorrectedReflectance_TrueColor'],
@@ -102,10 +98,7 @@ MODIS_Terra_CorrectedReflectance_TrueColor = layer(-20037508.3427892,
                                                    True, 
                                                    False)
 
-VIIRS_NOAA20_Thermal_Anomalies_375m_All = layer(-180, 
-                                                -90, 
-                                                180, 
-                                                90, 
+VIIRS_NOAA20_Thermal_Anomalies_375m_All = layer(
                                                 'EPSG:4326', 
                                                 'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?', 
                                                 ['VIIRS_NOAA20_Thermal_Anomalies_375m_All'],
@@ -115,10 +108,7 @@ VIIRS_NOAA20_Thermal_Anomalies_375m_All = layer(-180,
                                                 True, 
                                                 True)
 
-MODIS_Aqua_Terra_AOD = layer(-180, 
-                         -90, 
-                           180, 
-                           90, 
+MODIS_Aqua_Terra_AOD = layer(
                            'EPSG:4326', 
                            'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?', 
                             ['MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth'],
@@ -127,3 +117,32 @@ MODIS_Aqua_Terra_AOD = layer(-180,
                              'image/png', 
                               True, 
                               True)
+
+
+# MODIS_Terra_CorrectedReflectance_TrueColor = layer(-20037508.3427892, 
+#                                                    -20037508.3427892, 
+#                                                    20037508.3427892, 
+#                                                    20037508.3427892, 
+#                                                    'EPSG:3857', 
+#                                                    'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?', 
+#                                                    ['MODIS_Terra_CorrectedReflectance_TrueColor'],
+#                                                    'MODIS_TCR', 
+#                                                    (1200, 600), 
+#                                                    'image/png', 
+#                                                    True, 
+#                                                    False)
+
+def set_bbox(self, bounds):
+    self.xmin = bounds[0]
+    self.ymin = bounds[1]
+    self.xmax = bounds[2]
+    self.ymax = bounds[3]
+    return self.xmin, self.ymin, self.xmax, self.ymax
+
+def resolution_calc(self):
+    if None in (self.xmin, self.ymin, self.xmax, self.ymax):
+        raise ValueError("Bounds must be set before calculating size.")
+    scalefactor = 100  
+    width = int((self.xmax - self.xmin) * scalefactor)
+    height = int((self.ymax - self.ymin) * scalefactor)
+    self.size = (width, height)
