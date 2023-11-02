@@ -42,7 +42,6 @@ def layer_pull(satname, date, region):
     if isinstance(date, list) and isinstance(satname, list):
         dates = date
         pri_dir = "Image_Directory"
-        os.chdir("WMS_API_Tool")
         if os.path.exists(pri_dir):        
             os.chdir(pri_dir)
             for d in range(0, len(dates)):
@@ -68,7 +67,6 @@ def layer_pull(satname, date, region):
                 os.chdir('..')
     elif isinstance(date, list):
         dates = date
-        os.chdir("WMS_API_Tool")
         pri_dir = "Image_Directory"
         os.chdir(pri_dir)
         for d in range(0, len(dates)):

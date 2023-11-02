@@ -1,7 +1,7 @@
 import os
 from io import BytesIO
 from skimage import io
-import requests
+import inspect
 import json
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
@@ -33,15 +33,17 @@ def main():
     #            lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All,
     #            lc.MODIS_Aqua_Terra_AOD,
     #            ]
-    satlist = [lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All]
     dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
-    bounds = [-124.41501099999999, 32.534374263000075, 
-              -114.13122247499996, 42.009508270000026]
     [inp, path] = dn.shapefile_finder("ShapesDir")
     out = bbox.shp_extent(path)
     print(out)
-    lc.set_bbox(bounds)
-    lc.resolution_calc()
+    satlist = [lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All, lc.MODIS_Aqua_Terra_AOD]
+    for layer in satlist:
+        layer.xmin, layer.ymin, layer.xmax, layer.ymax = out
+
+    lc.resolution_calc(lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All)
+    lc.resolution_calc(lc.MODIS_Aqua_Terra_AOD)
+    lc.layer_pull(satlist, dates[1:], 'California')
     # #Note, Imgdir_make includes the WMS Req function.    
     # lc.layer_pull(satlist, dates[1::], 'World')
     # #print(satlist[0].layer_attr(satlist[0].wms))
