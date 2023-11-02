@@ -1,3 +1,13 @@
+V 0.6.1
+Changelog 11/2/23
+-Changes to program architecture, run.py moved to parent directory to communicate with child directories.
+-Class layer no longer is hardcoded for bounding box size and image resolution.
+-Addition of image directory for output of API returns.
+-Run function works with test output.
+
+
+
+
 Description of functions contained within each directory and module
 
 

@@ -29,10 +29,6 @@ import time
 overwrite = True
 
 def main():
-    # satlist = [lc.MODIS_Terra_CorrectedReflectance_TrueColor, 
-    #            lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All,
-    #            lc.MODIS_Aqua_Terra_AOD,
-    #            ]
     dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
     [inp, path] = dn.shapefile_finder("ShapesDir")
     out = bbox.shp_extent(path)
@@ -43,10 +39,8 @@ def main():
 
     lc.resolution_calc(lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All)
     lc.resolution_calc(lc.MODIS_Aqua_Terra_AOD)
+    
     lc.layer_pull(satlist, dates[1:], 'California')
-    # #Note, Imgdir_make includes the WMS Req function.    
-    # lc.layer_pull(satlist, dates[1::], 'World')
-    # #print(satlist[0].layer_attr(satlist[0].wms))
     
 
 
