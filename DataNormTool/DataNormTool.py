@@ -4,6 +4,19 @@ from shapely.geometry import shape, mapping
 import os
 import time
 
+def main():
+    print('DataNormTool Test')
+    shpname, shppath = shapefile_finder("FireGDB")
+    os.chdir('FireGDB')
+    gdf = gpd.read_file('FireGDB.shp')
+    userinput = input("Enter OBJECTID or FIRE_NAME: ")
+    userinput = str(userinput)
+    fire_name_query = QueryAndParamPull(gdf, 'FIRE_NAME', userinput)
+    print(fire_name_query)
+    
+
+
+#Returns Shapefile Name and Shapefile Path
 def shapefile_finder(DataDir):
     # Get the current working directory
     current_directory = os.getcwd()
@@ -28,6 +41,31 @@ def shapefile_finder(DataDir):
         return shapefile_name, full_path
     else:
         return None, None
+    
+import geopandas as gpd
+
+def QueryAndParamPull(gdf, filter_type, filter_value):
+    # Filter the GeoDataFrame based on the input filter_type and filter_value
+    if filter_type.lower() == 'objectid':
+        filtered_gdf = gdf[gdf['OBJECTID'] == filter_value]
+    elif filter_type.lower() == 'fire_name':
+        filtered_gdf = gdf[gdf['FIRE_NAME'].str.upper() == filter_value.upper()]
+    else:
+        raise ValueError("Filter type must be 'OBJECTID' or 'FIRE_NAME'")
+    
+    bounds = gdf.total_bounds
+
+    # If the filter results in at least one row, extract the attributes
+    if not filtered_gdf.empty:
+        attributes = filtered_gdf[['FIRE_NAME', 'ALARM_DATE', 'CONT_DATE']].to_dict('records')
+        return attributes, (bounds[0], bounds[1], bounds[2], bounds[3])
+    else:
+        return None
+
+# Example usage:
+# Replace 'YOUR_FIRE_NAME' or 'YOUR_OBJECTID' with your specific fire name or object ID.
+
+
 
 def shapefile_normalization(input_shapefile, ShpDir, start_date, end_date, fire_name, source_name):
     # Change working directory to ShpDir
@@ -85,3 +123,5 @@ def shapefile_normalization(input_shapefile, ShpDir, start_date, end_date, fire_
         
     print(f"Shapefile with appended fields saved to {output_shapefile_path}")
 
+if __name__ == "__main__":
+    main()
