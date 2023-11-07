@@ -7,12 +7,15 @@ import time
 def main():
     print('DataNormTool Test')
     shpname, shppath = shapefile_finder("FireGDB")
+    os.chdir('DataNormTool')
     os.chdir('FireGDB')
     gdf = gpd.read_file('FireGDB.shp')
     userinput = input("Enter OBJECTID or FIRE_NAME: ")
     userinput = str(userinput)
-    fire_name_query = QueryAndParamPull(gdf, 'FIRE_NAME', userinput)
-    print(fire_name_query)
+    fire_name_query, bounds = QueryAndParamPull(gdf, 'FIRE_NAME', userinput)
+    print("Fire Name Query", fire_name_query)
+    print("Bounds", bounds)
+
     
 
 
