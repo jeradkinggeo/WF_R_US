@@ -6,9 +6,11 @@ import os
 import time
 import geopandas as gpd
 import matplotlib.pyplot as plt
+os.path.join(os.getcwd(), "DataNormTool")
+import DataNormTool as dn
 
 def main():
-    shpname, shpfp =  shapefile_finder("ShapesDir")
+    shpname, shpfp =  dn.shapefile_finder("ShapesDir")
     shapefile_path = shpfp
     gdf = gpd.read_file(shapefile_path)
     centroids = shp_centroid(shapefile_path)
@@ -43,30 +45,6 @@ def shp_extent(shapefile_path):
     bounds = gdf.total_bounds
     return (bounds[0], bounds[1], bounds[2], bounds[3])
 
-def shapefile_finder(DataDir):
-    # Get the current working directory
-    current_directory = os.getcwd()
 
-    # Create the full path to your DataDir
-    full_path = os.path.join(current_directory, "DataNormTool", DataDir)
-
-    print("Searching in:", full_path)
-
-    try:
-        all_files = os.listdir(full_path)
-    except FileNotFoundError:
-        print(f"Directory {full_path} not found.")
-        return None, None
-
-    # Filter out the files that have a .shp extension
-    shapefiles = [f for f in all_files if f.endswith('.shp')]
-
-    # If shapefiles are found, return the first one along with its full path
-    if shapefiles:
-        shapefile_name = shapefiles[0]
-        return shapefile_name, full_path
-    else:
-        return None, None
-    
 if __name__ == '__main__':
     main()
