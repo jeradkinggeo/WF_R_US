@@ -30,21 +30,27 @@ import geopandas as gpd
 overwrite = True
 
 def main():
+
+    sfinput = input("Enter the desired scale factor: ")
+    sfinput = int(sfinput)
+    # queryinp1 = input("Desired Query Method (OBJECTID or FIRE_NAME): ")
+    # queryinp1 = str("Desired Query Method (OBJECTID or FIRE_NAME): ")
+    
+    userinput = input("Enter OBJECTID or FIRE_NAME: ")
+    userinput = str(userinput)
+
     shpname, shppath = dn.shapefile_finder("FireGDB")
-    fire_attr_dict, bounds = dn.QueryAndParamPull(shppath, 'FIRE_NAME', 'SILVERADO')
+    fire_attr_dict, bounds = dn.QueryAndParamPull(shppath, 'FIRE_NAME', userinput)
     datelist = dn.create_date_list(fire_attr_dict['ALARM_DATE'], fire_attr_dict['CONT_DATE'])
     print(datelist)
     satlist = [lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All, lc.MODIS_Aqua_Terra_AOD]
-    # dates = ["2019-09-12","2020-09-12","2021-09-12","2022-09-12"]
-    # [inp, path] = dn.shapefile_finder("ShapesDir")
-    # out = bbox.shp_extent(path)
-    # print(out)
-    # satlist = [lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All, lc.MODIS_Aqua_Terra_AOD]
+
     for layer in satlist:
         layer.xmin, layer.ymin, layer.xmax, layer.ymax = bounds
 
-    lc.resolution_calc(lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All)
-    lc.resolution_calc(lc.MODIS_Aqua_Terra_AOD)
+    
+    lc.resolution_calc(lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All, sfinput)
+    lc.resolution_calc(lc.MODIS_Aqua_Terra_AOD, sfinput)
     
     lc.layer_pull(satlist, datelist, fire_attr_dict['FIRE_NAME'])
     

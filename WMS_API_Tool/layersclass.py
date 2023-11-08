@@ -137,10 +137,10 @@ def set_bbox(self, bounds):
     self.ymax = bounds[3]
     return self.xmin, self.ymin, self.xmax, self.ymax
 
-def resolution_calc(self):
+def resolution_calc(self, scale):
     if None in (self.xmin, self.ymin, self.xmax, self.ymax):
         raise ValueError("Bounds must be set before calculating size.")
-    scalefactor = 100  
+    scalefactor = scale  
     width = int((self.xmax - self.xmin) * scalefactor)
     height = int((self.ymax - self.ymin) * scalefactor)
     self.size = (width, height)

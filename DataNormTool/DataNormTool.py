@@ -13,21 +13,21 @@ def create_date_list(start_date, end_date):
     date_list = [(start + timedelta(days=i)).strftime("%Y-%m-%d") for i in range(num_days + 1)]
     return date_list
 
-def QueryAndParamPull(shapefile_path, filter_type, filter_value):
+def QueryAndParamPull(shapefile_path, query_type, query_value):
     gdf = gpd.read_file(shapefile_path)
     # Filter the GeoDataFrame based on the input filter_type and filter_value
-    if filter_type.lower() == 'objectid':
-        filtered_gdf = gdf[gdf['OBJECTID'] == filter_value]
-    elif filter_type.lower() == 'fire_name':
-        filtered_gdf = gdf[gdf['FIRE_NAME'].str.upper() == filter_value.upper()]
+    if query_type.lower() == 'objectid':
+        queried_gdf = gdf[gdf['OBJECTID'] == query_value]
+    elif query_type.lower() == 'fire_name':
+        queried_gdf = gdf[gdf['FIRE_NAME'].str.upper() ==query_value.upper()]
     else:
         raise ValueError("Filter type must be 'OBJECTID' or 'FIRE_NAME'")
     
-    bounds = gdf.total_bounds
+    bounds = queried_gdf.total_bounds
 
     # If the filter results in at least one row, extract the attributes
-    if not filtered_gdf.empty:
-        attributes = filtered_gdf.iloc[0][['FIRE_NAME', 'ALARM_DATE', 'CONT_DATE']].to_dict()
+    if not queried_gdf.empty:
+        attributes = queried_gdf.iloc[0][['FIRE_NAME', 'ALARM_DATE', 'CONT_DATE']].to_dict()
         return attributes, (bounds[0], bounds[1], bounds[2], bounds[3])
     else:
         return None
