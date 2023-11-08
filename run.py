@@ -42,14 +42,24 @@ def main():
     shpname, shppath = dn.shapefile_finder("FireGDB")
     fire_attr_dict, bounds = dn.QueryAndParamPull(shppath, 'FIRE_NAME', userinput)
     datelist = dn.create_date_list(fire_attr_dict['ALARM_DATE'], fire_attr_dict['CONT_DATE'])
-    satlist = [lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All, lc.MODIS_Aqua_Terra_AOD]
+    satlist = [lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All, lc.MODIS_Aqua_Terra_AOD, lc.MODIS_Terra_CorrectedReflectance_TrueColor]
 
     for layer in satlist:
-        layer.xmin, layer.ymin, layer.xmax, layer.ymax = bounds
+        if layer.crs == 'EPSG:4326':
+            layer.xmin, layer.ymin, layer.xmax, layer.ymax = bounds
+        elif layer.crs == 'EPSG:3857':
+            coordtransform = lc.coord_transformer(bounds)
+            layer.xmin, layer.ymin, layer.xmax, layer.ymax = coordtransform
 
     
     lc.resolution_calc(lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All, sfinput)
     lc.resolution_calc(lc.MODIS_Aqua_Terra_AOD, sfinput)
+    lc.resolution_calc(lc.MODIS_Terra_CorrectedReflectance_TrueColor, (sfinput/sfinput) * .1)
+    # current_width , current_height = lc.MODIS_Terra_CorrectedReflectance_TrueColor.size
+    # current_width = current_width * .1
+    # current_height = current_height * .1
+    # lc.MODIS_Terra_CorrectedReflectance_TrueColor.size = (current_width, current_height)
+
     
     lc.layer_pull(satlist, datelist, fire_attr_dict['FIRE_NAME'])
     

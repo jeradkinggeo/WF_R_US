@@ -3,6 +3,7 @@ import requests
 import xml.etree.ElementTree as xmlet
 import lxml.etree as xmltree
 import os
+from pyproj import transform, Proj
 
 class layer:
     def __init__(self, crs, wms, layer_name, abr, 
@@ -37,6 +38,13 @@ class layer:
                     transparent=self.transparent)
         return result
     
+def coord_transformer(bounds):
+    proj_4326 = Proj(init = 'epsg:4326')
+    proj_3857 = Proj(init = 'epsg:3857')
+    xmin, ymin = transform(proj_4326, proj_3857, bounds[0], bounds[1])
+    xmax, ymax = transform(proj_4326, proj_3857, bounds[2], bounds[3])
+    return (xmin, ymin, xmax, ymax)
+
 def layer_pull(satname, date, region):
     sat = satname
     if isinstance(date, list) and isinstance(satname, list):
@@ -81,11 +89,8 @@ def layer_pull(satname, date, region):
         pathname = region + '_' + str(date)
         os.makedirs(pathname)
         os.chdir(pathname)
-        #create subdirectories for each satellite
 
-#Defining layers
 
-#Need a function to convert the bounds of the shapefile to the correct crs
 MODIS_Terra_CorrectedReflectance_TrueColor = layer(
                                                    'EPSG:3857', 
                                                    'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?', 
@@ -117,19 +122,6 @@ MODIS_Aqua_Terra_AOD = layer(
                               True)
 
 
-# MODIS_Terra_CorrectedReflectance_TrueColor = layer(-20037508.3427892, 
-#                                                    -20037508.3427892, 
-#                                                    20037508.3427892, 
-#                                                    20037508.3427892, 
-#                                                    'EPSG:3857', 
-#                                                    'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?', 
-#                                                    ['MODIS_Terra_CorrectedReflectance_TrueColor'],
-#                                                    'MODIS_TCR', 
-#                                                    (1200, 600), 
-#                                                    'image/png', 
-#                                                    True, 
-#                                                    False)
-
 def set_bbox(self, bounds):
     self.xmin = bounds[0]
     self.ymin = bounds[1]
@@ -138,9 +130,7 @@ def set_bbox(self, bounds):
     return self.xmin, self.ymin, self.xmax, self.ymax
 
 def resolution_calc(self, scale):
-    if None in (self.xmin, self.ymin, self.xmax, self.ymax):
-        raise ValueError("Bounds must be set before calculating size.")
     scalefactor = scale  
-    width = int((self.xmax - self.xmin) * scalefactor)
-    height = int((self.ymax - self.ymin) * scalefactor)
+    width = ((self.xmax - self.xmin) * scalefactor)
+    height = ((self.ymax - self.ymin) * scalefactor)
     self.size = (width, height)
