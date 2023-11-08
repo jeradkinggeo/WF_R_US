@@ -31,7 +31,7 @@ overwrite = True
 
 def main():
 
-    sfinput = input("Enter the desired scale factor: ")
+    sfinput = input("Enter the desired scale factor (Recommended 1000): ")
     sfinput = int(sfinput)
     # queryinp1 = input("Desired Query Method (OBJECTID or FIRE_NAME): ")
     # queryinp1 = str("Desired Query Method (OBJECTID or FIRE_NAME): ")
@@ -42,7 +42,6 @@ def main():
     shpname, shppath = dn.shapefile_finder("FireGDB")
     fire_attr_dict, bounds = dn.QueryAndParamPull(shppath, 'FIRE_NAME', userinput)
     datelist = dn.create_date_list(fire_attr_dict['ALARM_DATE'], fire_attr_dict['CONT_DATE'])
-    print(datelist)
     satlist = [lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All, lc.MODIS_Aqua_Terra_AOD]
 
     for layer in satlist:
