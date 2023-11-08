@@ -2,15 +2,22 @@ import fiona
 from fiona.crs import to_string
 from shapely.geometry import shape, mapping
 import os
+import geopandas as gpd
 import DataNormTool as dn
 
 def main():
-    [inp, path] = dn.shapefile_finder("ShapesDir")
-    # startdate = input("Enter start date (year-month-day): ")
-    # enddate = input("Enter end date (year-month-day): ")
-    # firename = input("Enter fire name: ")
-    # sourcename = input("Enter source name: ")
-    dn.shapefile_normalization(inp, path, "3-10-2000", "9-12-2002", "BigFire", "URL.com")
+    print('DataNormTool Test')
+    shpname, shppath = dn.shapefile_finder("FireGDB")
+    os.chdir('DataNormTool')
+    os.chdir('FireGDB')
+    gdf = gpd.read_file('FireGDB.shp')
+    userinput = input("Enter OBJECTID or FIRE_NAME: ")
+    userinput = str(userinput)
+    fire_attr_dict, bounds = dn.QueryAndParamPull(shppath, 'FIRE_NAME', userinput)
+    print("Fire Name Query", fire_attr_dict)
+    print("Bounds", bounds)
+    datelist = dn.create_date_list(fire_attr_dict['ALARM_DATE'], fire_attr_dict['CONT_DATE'])
+    print(datelist)
 
 
 if __name__ == "__main__":
