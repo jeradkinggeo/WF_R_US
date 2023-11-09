@@ -111,6 +111,8 @@ VIIRS_NOAA20_Thermal_Anomalies_375m_All = layer(
                                                 True, 
                                                 True)
 
+# ^ Only has data past 2020-01-01
+
 VIIRS_NOAA20_LST = layer(
                         'EPSG:4326', 
                         'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?', 
@@ -131,6 +133,16 @@ MODIS_Aqua_Terra_AOD = layer(
                               True, 
                               True)
 
+MODIS_Combined_Thermal_Anomalies_All = layer(
+                           'EPSG:4326', 
+                           'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?', 
+                            ['MODIS_Combined_Thermal_Anomalies_All'],
+                            'MODIS_Terra_TA', 
+                             (1200, 600), 
+                             'image/png', 
+                              True, 
+                              True)
+
 
 
 
@@ -146,3 +158,19 @@ def resolution_calc(self, scale):
     width = ((self.xmax - self.xmin) * scalefactor)
     height = ((self.ymax - self.ymin) * scalefactor)
     self.size = (width, height)
+
+
+#Index for layers are hardcoded, but works for now
+def layer_check(layerlist, datelist):
+    if datelist[0] < '2020-01-01':
+        print("VIIRS_NOAA20_Thermal_Anomalies_375m_All does not have data before 2020-01-01")
+        return layerlist[1::]
+    else:
+        layerlist.remove(layerlist[1])
+        return layerlist
+
+
+
+        
+
+            

@@ -1,8 +1,6 @@
 import os
 from io import BytesIO
 from skimage import io
-import inspect
-import json
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 import cartopy.crs as ccrs
@@ -10,7 +8,6 @@ import cartopy
 from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
 import urllib.request
 import urllib.parse
-import mapbox_vector_tile
 import xml.etree.ElementTree as xmlet
 import lxml.etree as xmltree
 from PIL import Image as plimg
@@ -33,17 +30,19 @@ def main():
 
     sfinput = input("Enter the desired scale factor (Recommended 1000): ")
     sfinput = int(sfinput)
-    # queryinp1 = input("Desired Query Method (OBJECTID or FIRE_NAME): ")
-    # queryinp1 = str("Desired Query Method (OBJECTID or FIRE_NAME): ")
     
     userinput = input("Enter OBJECTID or FIRE_NAME: ")
     userinput = str(userinput)
 
     shpname, shppath = dn.shapefile_finder("FireGDB")
+
     fire_attr_dict, bounds = dn.QueryAndParamPull(shppath, 'FIRE_NAME', userinput)
+
     datelist = dn.create_date_list(fire_attr_dict['ALARM_DATE'], fire_attr_dict['CONT_DATE'])
-    satlist = [lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All, lc.MODIS_Aqua_Terra_AOD, 
+
+    satlist = [lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All, lc.MODIS_Combined_Thermal_Anomalies_All, lc.MODIS_Aqua_Terra_AOD, 
                lc.MODIS_Terra_CorrectedReflectance_TrueColor, lc.VIIRS_NOAA20_LST]
+    satlist = lc.layer_check(satlist,datelist)
 
     for layer in satlist:
         if layer.crs == 'EPSG:4326':
@@ -52,14 +51,12 @@ def main():
             coordtransform = lc.coord_transformer(bounds)
             layer.xmin, layer.ymin, layer.xmax, layer.ymax = coordtransform
 
-    
-    lc.resolution_calc(lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All, sfinput)
-    lc.resolution_calc(lc.MODIS_Aqua_Terra_AOD, sfinput)
-    lc.resolution_calc(lc.VIIRS_NOAA20_LST, sfinput)
-    lc.resolution_calc(lc.MODIS_Terra_CorrectedReflectance_TrueColor, (sfinput/sfinput) * .1)
-
-
-    
+    for layer in satlist:
+        if layer.crs == 'EPSG:4326':
+            lc.resolution_calc(layer, sfinput)
+        elif layer.crs == 'EPSG:3857':
+            lc.resolution_calc(layer, (sfinput/sfinput) * .1)
+   
     lc.layer_pull(satlist, datelist, fire_attr_dict['FIRE_NAME'])
     
 

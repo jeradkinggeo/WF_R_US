@@ -31,6 +31,7 @@ def QueryAndParamPull(shapefile_path, query_type, query_value):
         attributes = queried_gdf.iloc[0][['FIRE_NAME', 'ALARM_DATE', 'CONT_DATE']].to_dict()
         return attributes, (bounds[0], bounds[1], bounds[2], bounds[3])
     else:
+        print("Oops! No fires were found with this query :(")
         return None
 
 
