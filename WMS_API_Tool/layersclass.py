@@ -111,6 +111,16 @@ VIIRS_NOAA20_Thermal_Anomalies_375m_All = layer(
                                                 True, 
                                                 True)
 
+VIIRS_NOAA20_LST = layer(
+                        'EPSG:4326', 
+                        'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?', 
+                        ['VIIRS_NOAA20_Land_Surface_Temp_Day'],
+                        'VIIRS_LST', 
+                        (1200, 600), 
+                        'image/png', 
+                        True, 
+                        True)
+
 MODIS_Aqua_Terra_AOD = layer(
                            'EPSG:4326', 
                            'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?', 
@@ -120,6 +130,8 @@ MODIS_Aqua_Terra_AOD = layer(
                              'image/png', 
                               True, 
                               True)
+
+
 
 
 def set_bbox(self, bounds):
