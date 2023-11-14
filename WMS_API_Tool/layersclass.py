@@ -4,6 +4,7 @@ import xml.etree.ElementTree as xmlet
 import lxml.etree as xmltree
 import os
 from pyproj import transform, Proj
+import datetime
 
 class layer:
     def __init__(self, crs, wms, layer_name, abr, 
@@ -52,6 +53,9 @@ def layer_pull(satname, date, region):
         pri_dir = "Image_Directory"
         if os.path.exists(pri_dir):        
             os.chdir(pri_dir)
+            current_time = datetime.datetime.now().strftime("%m-%d_%H-%M")
+            os.mkdir("runtime" + '_' + current_time)
+            os.chdir("runtime" + '_' + current_time)
             for d in range(0, len(dates)):
                 pathname = region + '_' + dates[d]
                 os.makedirs(pathname)
