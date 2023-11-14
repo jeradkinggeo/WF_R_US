@@ -131,7 +131,7 @@ MODIS_Aqua_Terra_AOD = layer(
                              (1200, 600), 
                              'image/png', 
                               True, 
-                              True)
+                              False)
 
 MODIS_Combined_Thermal_Anomalies_All = layer(
                            'EPSG:4326', 

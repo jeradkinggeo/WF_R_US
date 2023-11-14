@@ -28,19 +28,20 @@ overwrite = True
 
 def main():
 
-    sfinput = input("Enter the desired scale factor (Recommended 1000): ")
-    sfinput = int(sfinput)
-    
     userinput = input("Enter OBJECTID or FIRE_NAME: ")
     userinput = str(userinput)
 
+    sfinput = input("Enter the desired scale factor (Recommended 1000): ")
+    sfinput = int(sfinput)
+    
     shpname, shppath = dn.shapefile_finder("FireGDB")
 
     fire_attr_dict, bounds = dn.QueryAndParamPull(shppath, 'FIRE_NAME', userinput)
 
     datelist = dn.create_date_list(fire_attr_dict['ALARM_DATE'], fire_attr_dict['CONT_DATE'])
 
-    satlist = [lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All, lc.MODIS_Combined_Thermal_Anomalies_All, lc.MODIS_Aqua_Terra_AOD, 
+    #Removed Aerosol Optical Depth (AOD) due to server issues
+    satlist = [lc.VIIRS_NOAA20_Thermal_Anomalies_375m_All, lc.MODIS_Combined_Thermal_Anomalies_All,
                lc.MODIS_Terra_CorrectedReflectance_TrueColor, lc.VIIRS_NOAA20_LST]
     satlist = lc.layer_check(satlist,datelist)
 
