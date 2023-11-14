@@ -1,26 +1,7 @@
-import os
-from io import BytesIO
-from skimage import io
-import matplotlib.pyplot as plt
-import matplotlib.ticker as mticker
-import cartopy.crs as ccrs
-import cartopy
-from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
-import urllib.request
-import urllib.parse
-import xml.etree.ElementTree as xmlet
-import lxml.etree as xmltree
-from PIL import Image as plimg
-import numpy as np
-from owslib.wms import WebMapService
-from IPython.display import Image, display
-import os
 import DataNormTool
 from DataNormTool import bbox_calculator as bbox
 from DataNormTool import DataNormTool as dn
 import WMS_API_Tool.layersclass as lc
-import time
-import geopandas as gpd
 
 
 
@@ -28,7 +9,7 @@ overwrite = True
 
 def main():
 
-    userinput = input("Enter OBJECTID or FIRE_NAME: ")
+    userinput = input("Enter FIRE NAME: ")
     userinput = str(userinput)
 
     sfinput = input("Enter the desired scale factor (Recommended 1000): ")

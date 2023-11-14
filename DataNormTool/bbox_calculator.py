@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 os.path.join(os.getcwd(), "DataNormTool")
 import DataNormTool as dn
 
+#For testing purposes
 def main():
     shpname, shpfp =  dn.shapefile_finder("ShapesDir")
     shapefile_path = shpfp
