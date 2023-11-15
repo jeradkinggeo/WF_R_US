@@ -16,7 +16,6 @@ def create_date_list(start_date, end_date):
 
 def QueryAndParamPull(shapefile_path, query_type, query_value):
     gdf = gpd.read_file(shapefile_path)
-    # Filter the GeoDataFrame based on the input filter_type and filter_value
     if query_type.lower() == 'objectid':
         queried_gdf = gdf[gdf['OBJECTID'] == query_value]
     elif query_type.lower() == 'fire_name':
@@ -26,7 +25,6 @@ def QueryAndParamPull(shapefile_path, query_type, query_value):
     
     bounds = queried_gdf.total_bounds
 
-    # If the filter results in at least one row, extract the attributes
     if not queried_gdf.empty:
         attributes = queried_gdf.iloc[0][['FIRE_NAME', 'ALARM_DATE', 'CONT_DATE']].to_dict()
         return attributes, (bounds[0], bounds[1], bounds[2], bounds[3])
@@ -34,6 +32,15 @@ def QueryAndParamPull(shapefile_path, query_type, query_value):
         print("Oops! No fires were found with this query :(")
         return None
 
+def attributes_to_log(shppath, text_path, query_value):
+    gdf = gpd.read_file(shppath)
+    queried_gdf = gdf[gdf['FIRE_NAME'].str.upper() == query_value.upper()]
+    queried_gdf = queried_gdf.drop(columns=['geometry'])
+    with open(text_path, 'w') as file:
+        for index, row in queried_gdf.iterrows():
+            for attribute, value in row.items():
+                file.write(f"{attribute}: {value}\n")
+            file.write("\n")  
 
 def shapefile_finder(DataDir):
     current_directory = os.getcwd()

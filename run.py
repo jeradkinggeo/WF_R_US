@@ -17,6 +17,13 @@ def main():
     
     shpname, shppath = dn.shapefile_finder("FireGDB")
 
+    attr_req = input("Would you like a txt log of the fire attributes (y/n): ")
+
+    if attr_req.lower() == 'y':
+        dn.attributes_to_log(shppath, "fire_attributes.txt", userinput)
+    elif attr_req.lower() == 'n':
+        pass
+
     fire_attr_dict, bounds = dn.QueryAndParamPull(shppath, 'FIRE_NAME', userinput)
 
     datelist = dn.create_date_list(fire_attr_dict['ALARM_DATE'], fire_attr_dict['CONT_DATE'])

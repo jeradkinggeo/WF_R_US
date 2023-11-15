@@ -5,6 +5,7 @@ This tool is designed to streamline the process of acquiring satellite imagery f
 
 ## Soon to be added 
 -Run script that automatically checks for updates 
+
 -Option for writing images to a directory sorted by layer, rather than date
 
 ## Current Features
