@@ -1,8 +1,6 @@
-import fiona
 from fiona.crs import to_string
 from shapely.geometry import shape, mapping
 import os
-import time
 from datetime import datetime, timedelta
 import geopandas as gpd
 from pyproj import Transformer

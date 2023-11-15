@@ -12,6 +12,14 @@ This tool is designed to streamline the process of acquiring satellite imagery f
 Dynamic API Requests: Automatically generates GIBS API requests tailored to the selected wildfire attributes.
 Highly Relevant Imagery: Retrieves satellite imagery layers focused on aspects critical to wildfire research, such as burn area, smoke dispersion, and vegetation health.
 
+## Dependencies 
+owslib.wms
+requests
+pyproj
+datetime
+geopandas
+matplotlib
+
 ## Data Sources
 NASA Global Imagery Browser Service
 https://nasa-gibs.github.io/gibs-api-docs/available-visualizations/

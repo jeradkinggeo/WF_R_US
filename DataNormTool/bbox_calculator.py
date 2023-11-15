@@ -1,9 +1,4 @@
-import fiona
-from fiona.crs import to_string
-import shapely
-from shapely.geometry import shape, mapping, Polygon
 import os
-import time
 import geopandas as gpd
 import matplotlib.pyplot as plt
 os.path.join(os.getcwd(), "DataNormTool")
