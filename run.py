@@ -9,7 +9,7 @@ overwrite = True
 
 def main():
 
-    print("Howdy! Welcome to the Wildfire's 'R' Us tool.")
+    print("Howdy! Welcome to the Wildfires 'R' Us tool.")
     time.sleep(1)
     print("If you need help, type help to provide a list of commands")
     while True:
