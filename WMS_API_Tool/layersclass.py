@@ -113,7 +113,7 @@ VIIRS_NOAA20_Thermal_Anomalies_375m_All = layer(
                                                 (1200, 600), 
                                                 'image/png', 
                                                 True, 
-                                                True)
+                                                False)
 
 # ^ Only has data past 2020-01-01
 
@@ -125,7 +125,7 @@ VIIRS_NOAA20_LST = layer(
                         (1200, 600), 
                         'image/png', 
                         True, 
-                        True)
+                        False)
 
 MODIS_Aqua_Terra_AOD = layer(
                            'EPSG:4326', 

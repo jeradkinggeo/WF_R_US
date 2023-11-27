@@ -40,6 +40,23 @@ def attributes_to_log(shppath, text_path, query_value):
                 file.write(f"{attribute}: {value}\n")
             file.write("\n")  
 
+def show_recs(shapefile_path):
+    gdf = gpd.read_file(shapefile_path)
+
+    if 'GIS_ACRES' not in gdf.columns:
+        print("Error: GIS_ACRES field not found in the shapefile.")
+        return
+
+    sorted_gdf = gdf.sort_values(by='GIS_ACRES', ascending=False)
+
+    for index, row in sorted_gdf.iterrows():
+        fire_name = row.get('FIRE_NAME', 'N/A')
+        alarm_date = row.get('ALARM_DATE', 'N/A')
+        cont_date = row.get('CONT_DATE', 'N/A')
+        gis_acres = row.get('GIS_ACRES', 'N/A')
+        print(f"Fire Name: {fire_name}, Alarm Date: {alarm_date}, Containment Date: {cont_date}, GIS Acres: {gis_acres}")
+
+
 def shapefile_finder(DataDir):
     current_directory = os.getcwd()
 
