@@ -1,0 +1,6 @@
+owslib.wms
+requests
+pyproj
+datetime
+geopandas
+matplotlib
