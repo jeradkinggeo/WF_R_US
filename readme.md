@@ -1,6 +1,6 @@
 # Wildfires 'R' Us Imagery Acquisition Tool
 
-## I am no longer actively working on this project. If this interests you, feel free to reach out, submit a PR, etc.
+### I am no longer actively working on this project. If this interests you, feel free to reach out, submit a PR, etc.
 
 ## Description 
 This tool is designed to streamline the process of acquiring satellite imagery for wildfire research in California. By leveraging the capabilities of the GIBS API, it allows users to query a comprehensive database of California wildfires and dynamically generates API requests based on specific geodatabase attributes. The result is a collection of image layers highly relevant to wildfire studies and response planning.
